@@ -7,6 +7,8 @@ RUN npm install
 
 COPY . .
 
+COPY wait-for-it.sh ./
+
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["./wait-for-it.sh", "mysql:3306", "--", "npm", "start"]
