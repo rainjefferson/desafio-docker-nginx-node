@@ -3,9 +3,9 @@ Desafio docker  - Nginx com Node e Mysql - full cycle
 
 ## Ajustes realizados incluindo o arquivo de script wait-for-it.sh e reajustados outros arquivos
 
-- node/Dockerfile
+- node/wait-for-it.sh
 
-### ApÛs ajustes
-Agora, quando vocÍ iniciar os containers com docker-compose up, o serviÁo node esperar· atÈ que o MySQL esteja 
-totalmente disponÌvel antes de iniciar o aplicativo Node.js. Isso garantir· que o aplicativo n„o encontre erros 
-de conex„o ao banco de dados durante a inicializaÁ„o.
+### Ap√≥s ajustes
+Agora, quando voc√™ iniciar os containers com docker-compose up, o servi√ßo node esperar√° at√© que o MySQL esteja 
+totalmente dispon√≠vel antes de iniciar o aplicativo Node.js. Isso garantir√° que o aplicativo n√£o encontre erros 
+de conex√£o ao banco de dados durante a inicializa√ß√£o.
