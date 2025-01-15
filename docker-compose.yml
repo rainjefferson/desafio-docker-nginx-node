@@ -1,14 +1,31 @@
-version: '3.8'
-
+version: "3.8"
 services:
-  db:
-    image: mysql:8.0
-    container_name: db
+  app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    ports:
+      - "8080:3000"
+    environment:
+      MYSQL_HOST: mysql
+      MYSQL_USER: root
+      MYSQL_PASSWORD: root
+      MYSQL_DATABASE: appdb
+    depends_on:
+      - mysql
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    volumes:
+      - .:/usr/src/app
+
+  mysql:
+    image: mysql:5.7
     environment:
       MYSQL_ROOT_PASSWORD: root
       MYSQL_DATABASE: appdb
-      MYSQL_USER: appuser
-      MYSQL_PASSWORD: apppassword
     ports:
       - "3306:3306"
     healthcheck:
@@ -16,35 +33,3 @@ services:
       interval: 10s
       timeout: 5s
       retries: 3
-
-  node:
-    build:
-      context: ./node
-      dockerfile: Dockerfile
-    container_name: node-app
-    environment:
-      DB_HOST: db
-      DB_USER: appuser
-      DB_PASSWORD: apppassword
-      DB_NAME: appdb
-    depends_on:
-      db:
-        condition: service_healthy
-    ports:
-      - "3000:3000"
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
-      interval: 10s
-      timeout: 5s
-      retries: 3
-
-  nginx:
-    image: nginx:latest
-    container_name: nginx
-    ports:
-      - "8080:80"
-    volumes:
-      - ./nginx:/etc/nginx/conf.d
-    depends_on:
-      node:
-        condition: service_healthy
