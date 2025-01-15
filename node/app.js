@@ -4,7 +4,6 @@ const mysql = require('mysql2');
 const app = express();
 const port = 3000;
 
-// Configuração do banco de dados
 const config = {
     host: process.env.MYSQL_HOST || 'mysql',
     user: process.env.MYSQL_USER || 'root',
@@ -14,15 +13,12 @@ const config = {
 
 const connection = mysql.createConnection(config);
 
-// Endpoint principal
 app.get('/', (req, res) => {
     const name = `User ${Math.floor(Math.random() * 100)}`;
 
-    // Inserir um nome na tabela
     connection.query(`INSERT INTO people (name) VALUES ('${name}')`, (err) => {
         if (err) throw err;
 
-        // Buscar todos os nomes
         connection.query('SELECT name FROM people', (err, results) => {
             if (err) throw err;
 
@@ -35,7 +31,15 @@ app.get('/', (req, res) => {
     });
 });
 
-// Iniciar o servidor
+app.get('/health', (req, res) => {
+    connection.query('SELECT 1', (err) => {
+        if (err) {
+            return res.status(500).send('Database is not healthy');
+        }
+        res.status(200).send('OK');
+    });
+});
+
 app.listen(port, () => {
     console.log(`Servidor rodando na porta ${port}`);
 });
