@@ -8,8 +8,8 @@ services:
       - ./nginx/default.conf:/etc/nginx/conf.d/default.conf
     depends_on:
       - node
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://node:3000/health"]
+    healthcheck:      
+      test: ["CMD", "curl", "-f", "http://127.0.0.1:3000/health"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -26,8 +26,8 @@ services:
       MYSQL_DATABASE: appdb
     depends_on:
       - mysql
-    healthcheck:
-      test: ["CMD", "curl", "-f", "http://localhost:3000/health"]
+    healthcheck:      
+      test: ["CMD", "curl", "-f", "http://mysql:3306"]
       interval: 10s
       timeout: 5s
       retries: 3
@@ -42,8 +42,13 @@ services:
       MYSQL_DATABASE: appdb      
     ports:
       - "3306:3306"
+    volumes:
+      - mysql_data:/var/lib/mysql
+      - ./mysql/init.sql:/docker-entrypoint-initdb.d/init.sql
     healthcheck:
       test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
       interval: 10s
       timeout: 5s
       retries: 3
+volumes:
+  mysql_data:
