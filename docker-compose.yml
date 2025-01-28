@@ -33,6 +33,7 @@ services:
       retries: 3
     volumes:
       - ./node:/usr/src/app
+      - /usr/src/app/node_modules
 
   mysql:
     image: mysql:5.7
