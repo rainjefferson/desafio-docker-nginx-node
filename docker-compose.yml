@@ -25,7 +25,8 @@ services:
       MYSQL_PASSWORD: ""
       MYSQL_DATABASE: appdb
     depends_on:
-      - mysql
+      mysql:
+        condition: service_healthy
     healthcheck:      
       test: ["CMD", "curl", "-f", "http://mysql:3306"]
       interval: 10s
